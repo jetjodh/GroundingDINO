@@ -27,14 +27,14 @@ import subprocess
 import subprocess
 import sys
 
-def install_torch():
-    try:
-        import torch
-    except ImportError:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "torch"])
+# def install_torch():
+#     try:
+#         import torch
+#     except ImportError:
+#         subprocess.check_call([sys.executable, "-m", "pip", "install", "torch"])
 
-# Call the function to ensure torch is installed
-install_torch()
+# # Call the function to ensure torch is installed
+# install_torch()
 
 import torch
 from setuptools import find_packages, setup
@@ -82,22 +82,22 @@ def get_extensions():
     extra_compile_args = {"cxx": []}
     define_macros = []
 
-    if CUDA_HOME is not None and (torch.cuda.is_available() or "TORCH_CUDA_ARCH_LIST" in os.environ):
-        print("Compiling with CUDA")
-        extension = CUDAExtension
-        sources += source_cuda
-        define_macros += [("WITH_CUDA", None)]
-        extra_compile_args["nvcc"] = [
-            "-DCUDA_HAS_FP16=1",
-            "-D__CUDA_NO_HALF_OPERATORS__",
-            "-D__CUDA_NO_HALF_CONVERSIONS__",
-            "-D__CUDA_NO_HALF2_OPERATORS__",
-        ]
-    else:
-        print("Compiling without CUDA")
-        define_macros += [("WITH_HIP", None)]
-        extra_compile_args["nvcc"] = []
-        return None
+    # if CUDA_HOME is not None and (torch.cuda.is_available() or "TORCH_CUDA_ARCH_LIST" in os.environ):
+    print("Compiling with CUDA")
+    extension = CUDAExtension
+    sources += source_cuda
+    define_macros += [("WITH_CUDA", None)]
+    extra_compile_args["nvcc"] = [
+        "-DCUDA_HAS_FP16=1",
+        "-D__CUDA_NO_HALF_OPERATORS__",
+        "-D__CUDA_NO_HALF_CONVERSIONS__",
+        "-D__CUDA_NO_HALF2_OPERATORS__",
+    ]
+    # else:
+    #     print("Compiling without CUDA")
+    #     define_macros += [("WITH_HIP", None)]
+    #     extra_compile_args["nvcc"] = []
+    #     return None
 
     sources = [os.path.join(extensions_dir, s) for s in sources]
     include_dirs = [extensions_dir]
